@@ -1,5 +1,5 @@
 /****************************************************************************
- * Navigation (feste Ziele)
+ * Navigation
  ****************************************************************************/
 function goToLogin() {
     loginScreen.classList.remove("d-none");
@@ -51,7 +51,7 @@ function goToLogin() {
     resultScreen.classList.add("d-none");
   }
   
-// Globale Variablen
+// Global variables
 let quizQuestions = [];
 let currentQuestionIndex = 0;
 let score = 0;
@@ -61,7 +61,7 @@ let currentShuffledAnswers = [];
 let currentCorrectAnswers = [];
 
 /****************************************************************************
- * DOM-Elemente
+ * DOM-Elements
  ****************************************************************************/
 const loginScreen = document.getElementById("loginScreen");
 const apScreen = document.getElementById("apScreen");
@@ -84,7 +84,7 @@ const restartButton = document.getElementById("restartButton");
 const explanationDiv = document.getElementById("explanation");
 
 /****************************************************************************
- * Navigation Funktionen
+ * Navigation functions
  ****************************************************************************/
 function goToLogin() {
   loginScreen.classList.remove("d-none");
@@ -132,7 +132,7 @@ const categoryBackgroundImages = {
 };
 
 /****************************************************************************
- * Array mischen (Fisher-Yates)
+ * Shuffle array (Fisher-Yates)
  ****************************************************************************/
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -142,16 +142,16 @@ function shuffleArray(array) {
 }
 
 /****************************************************************************
- * Antworten mischen
+ * Shuffle answers
  ****************************************************************************/
 function shuffleAnswers(question) {
-  // Erstelle ein Array von Objekten (Antworttext + ursprünglicher Index)
+  // Create array of objects
   let answerArray = question.answers.map((answer, index) => {
     return { text: answer, originalIndex: index };
   });
-  // Mische das Array
+  // shuffle array
   shuffleArray(answerArray);
-  // Ermittle die neuen korrekten Indizes
+  // get new index
   let newCorrect = answerArray.reduce((acc, item, newIndex) => {
     if (question.correct.includes(item.originalIndex)) {
       acc.push(newIndex);
@@ -162,9 +162,9 @@ function shuffleAnswers(question) {
 }
 
 /****************************************************************************
- * Quiz-Funktionen
+ * Quiz functions
  ****************************************************************************/
-// Bei AP1: Falls "KomITIL" gewählt wird, wird der Unterkategorien-Screen angezeigt.
+
 function startCategory(category) {
   if (apGroup === "AP1" && category === "KomITIL") {
     goToKomITILSubcategories();
@@ -173,7 +173,7 @@ function startCategory(category) {
   }
 }
 
-// Startet das Quiz in der gewählten Kategorie (AP1, AP2 oder alles)
+
 function startQuiz(category) {
   quizQuestions = getQuizQuestions(category);
   shuffleArray(quizQuestions); // Fragen zufällig mischen
@@ -194,7 +194,7 @@ function startQuiz(category) {
   showNextQuestion();
 }
 
-// Zeigt die nächste Frage an
+
 function showNextQuestion() {
   if (currentQuestionIndex >= quizQuestions.length || currentQuestionIndex === 20) {
     endQuiz();
@@ -203,13 +203,12 @@ function showNextQuestion() {
   explanationDiv.innerHTML = "";
   confirmButton.disabled = true;
   answerButtons.innerHTML = "";
-  // Beim Start der neuen Frage den "Nächste Frage"-Button ausblenden
   nextButton.classList.add("d-none");
 
   const currentQuestion = quizQuestions[currentQuestionIndex];
   questionText.innerText = currentQuestion.question;
 
-  // Mische Antwortmöglichkeiten und ermittle neue korrekte Indizes
+
   const shuffledData = shuffleAnswers(currentQuestion);
   currentShuffledAnswers = shuffledData.answers;
   currentCorrectAnswers = shuffledData.correct;
@@ -232,7 +231,7 @@ function showNextQuestion() {
   questionCount.innerText = `Frage ${currentQuestionIndex + 1} von ${Math.min(quizQuestions.length, 20)}`;
 }
 
-// Prüft die gegebene Antwort
+
 function checkAnswer() {
   const currentQuestion = quizQuestions[currentQuestionIndex];
   const selectedButtons = [...answerButtons.children].filter(b => b.classList.contains("selected"));
@@ -245,10 +244,8 @@ function checkAnswer() {
 
   console.log("isCorrect?", isCorrect);
 
-  // Deaktiviere alle Antwort-Buttons
   [...answerButtons.children].forEach(b => b.disabled = true);
 
-  // Färbe die Buttons entsprechend ein
   [...answerButtons.children].forEach(b => {
     const index = parseInt(b.getAttribute("data-index"));
     const shouldBeSelected = currentCorrectAnswers.includes(index);
@@ -257,7 +254,7 @@ function checkAnswer() {
     b.classList.add(isSelected === shouldBeSelected ? "border-green" : "border-red");
   });
 
-  // Leere den Video-Container, falls bereits ein Video angezeigt wird
+
   document.getElementById("videoContainer").innerHTML = "";
 
   if (isCorrect) {
@@ -267,12 +264,10 @@ function checkAnswer() {
     nextButton.classList.remove("d-none");
     console.log("Antwort korrekt, nächste Frage wird angezeigt.");
   } else {
-    // Erstelle Texte für die Benutzerantwort und die korrekte Antwort
     let userAnswerText = selectedIndices.map(i => currentShuffledAnswers[i]).join(", ");
     let correctAnswerText = currentCorrectAnswers.map(i => currentShuffledAnswers[i]).join(", ");
     console.log("Falsche Antwort. Benutzer:", userAnswerText, "Korrekt:", correctAnswerText);
 
-    // Anfrage an das Backend, um die Erklärung zu erhalten
     getAIExplanation(currentQuestion.question, userAnswerText, correctAnswerText)
       .then(data => {
         console.log("Backend-Antwort:", data);
@@ -281,7 +276,6 @@ function checkAnswer() {
         } else {
           explanationDiv.innerHTML = `<div class="alert alert-danger">Fehler beim Abrufen der KI.</div>`;
         }
-        // Video-Vorschau einbetten, falls vorhanden, im Container "videoContainer"
         if (currentQuestion.videoUrl) {
           const urlObj = new URL(currentQuestion.videoUrl);
           const videoId = urlObj.searchParams.get("v");
@@ -316,7 +310,6 @@ function checkAnswer() {
 
 
 nextButton.addEventListener("click", () => {
-  // Video-Container leeren, damit das Video nicht in der nächsten Frage angezeigt wird
   document.getElementById("videoContainer").innerHTML = "";
   currentQuestionIndex++;
   nextButton.classList.add("d-none");
@@ -324,13 +317,11 @@ nextButton.addEventListener("click", () => {
   showNextQuestion();
 });
 
-// Gibt eine Erklärung mit den korrekten Antworten zurück
 function getExplanation(question, selectedIndices, correctAnswers) {
   const correctText = correctAnswers.map(i => `"${currentShuffledAnswers[i]}"`).join(", ");
   return `Falsch: Die richtige(n) Antwort(en) ist/sind: ${correctText}.`;
 }
 
-// Beendet das Quiz und zeigt das Ergebnis
 function endQuiz() {
   quizScreen.classList.add("d-none");
   resultScreen.classList.remove("d-none");
@@ -338,13 +329,10 @@ function endQuiz() {
   finalScore.innerText = `Du hast ${score} von ${Math.min(quizQuestions.length, 20)} Fragen richtig beantwortet!`;
 }
 
-/****************************************************************************
- * KomITIL-Funktionen
- ****************************************************************************/
+
 function startKomITILQuiz(subcat) {
   currentQuestionIndex = 0;
   score = 0;
-  // Bei "alles" werden alle KomITIL-Fragen genutzt, sonst nur die mit passender Subkategorie.
   quizQuestions = (subcat === "alles") ? komITILQuestions : komITILQuestions.filter(q => q.subcategory === subcat);
   shuffleArray(quizQuestions);
 
@@ -360,9 +348,7 @@ function startKomITILQuiz(subcat) {
   showNextQuestion();
 }
 
-/****************************************************************************
- * Ermittelt Quizfragen basierend auf der gewählten Kategorie
- ****************************************************************************/
+
 function getQuizQuestions(category) {
   if (apGroup === "AP1") {
     return ap1Questions.filter(q => q.category === category);
@@ -374,9 +360,7 @@ function getQuizQuestions(category) {
   return [];
 }
 
-/****************************************************************************
- * Füllt die Kategorie-Auswahl
- ****************************************************************************/
+
 function populateCategoryScreen() {
   categoryList.innerHTML = "";
   let cats = [];
@@ -412,14 +396,10 @@ function populateCategoryScreen() {
 }
 
 
-/****************************************************************************
- * Beendet das Quiz
- ****************************************************************************/
+
 
 function quitQuiz() {
-  // Setze den Video-Container zurück
   document.getElementById("videoContainer").innerHTML = "";
-  // Setze alle quizbezogenen Variablen zurück
   currentQuestionIndex = 0;
   score = 0;
   currentShuffledAnswers = [];
@@ -438,7 +418,6 @@ loginButton.addEventListener("click", () => {
     return;
   }
   currentUser = username;
-  // Direkt zur AP-Auswahl, da kein Highscore-Screen mehr vorhanden ist
   goToAP();
 });
 
@@ -458,7 +437,6 @@ document.getElementById("apAllButton").addEventListener("click", () => {
   populateCategoryScreen();
 });
 
-// KomITIL-Unterkategorien
 document.getElementById("komITIL_pm_Button").addEventListener("click", () => {
   startKomITILQuiz("Projektmanagement");
 });
@@ -472,7 +450,7 @@ document.getElementById("komITIL_all_Button").addEventListener("click", () => {
   startKomITILQuiz("alles");
 });
 
-// "Weiter" / "Neues Quiz"
+
 confirmButton.addEventListener("click", () => { 
   checkAnswer(); 
 });
@@ -481,7 +459,8 @@ restartButton.addEventListener("click", () => {
   document.getElementById("videoContainer").innerHTML = "";
 });
 
-// Funktion, um vom Backend die KI-Erklärung abzurufen
+
+
 function getAIExplanation(question, userAnswer, correctAnswer) {
   return fetch("http://localhost:5000/explain", {
     method: "POST",
