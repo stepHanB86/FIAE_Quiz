@@ -5,11 +5,10 @@ import os
 from dotenv import load_dotenv
 
 
-# Setze den API Key und die Base-URL direkt auf dem Modul
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# Testaufruf zur Überprüfung der Konfiguration
+
 try:
     response = openai.ChatCompletion.create(
         model="gpt-4o",
