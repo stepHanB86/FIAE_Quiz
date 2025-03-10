@@ -1,0 +1,112 @@
+body {
+  background-color: #2f4962; /* Einheitlicher Hintergrund */
+  font-family: Arial, sans-serif;
+  padding: 0px;
+
+}
+
+.d-screen {
+  background-color: #2f4962;
+  padding: 0px;
+  max-width: 600px;
+}
+
+.custom-btn {
+  background-color: #bacce0 !important;
+  border: 1px solid #000000 !important;
+  color: black !important;
+}
+
+/* Wenn ein Button ausgewählt ist, wird er heller und etwas größer */
+.btn.selected,
+.btn.active {
+  background-color: #d6dde4 !important;
+  font-size: 1.2rem;
+  -webkit-box-shadow: 0px 5px 6px 0px rgb(116, 116, 116);
+  -moz-box-shadow: 0px 5px 6px 0px rgb(116, 116, 116);
+  box-shadow: 0px 5px 6px 0px rgb(116, 116, 116);
+}
+
+/* Border-Klassen für die Auswertung */
+.border-green {
+  border: 2px solid green !important;
+}
+.border-red {
+  border: 2px solid red !important;
+}
+.card{
+  border: none;
+}
+.card-body{
+  background: linear-gradient(to bottom, #8eb0d1, #8eb0d1d6 );
+  width: 100%;
+  padding: 20px;
+  height: auto !important;
+  max-height: none !important;
+}
+.card-title{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  font-size: 1.8rem;
+}
+
+.title{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  font-weight: 550;
+  font-size: 2.5rem;
+}
+
+.copyright{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  margin-top: 10px;
+  color: #bacce0;
+  font-size: 0.8rem;
+  margin-top: 0px; 
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto; /* zentriert das Bild */
+  object-fit: contain;
+}
+
+.alert.alert-danger {
+  max-height: none !important;
+  overflow: visible !important;
+  white-space: normal !important;
+}
+
+#quizScreen{
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100%;
+}
+
+
+#questionText{
+  background-color: #d6dde4;
+  padding: 20px;
+  border-radius: 10px;
+  border: solid 1px;
+  -webkit-box-shadow: 0px 5px 6px 0px rgb(116, 116, 116);
+  -moz-box-shadow: 0px 5px 6px 0px rgb(116, 116, 116);
+  box-shadow: 0px 5px 6px 0px rgb(116, 116, 116);
+}
+
+/* Layout für Answer-Buttons */
+#answerButtons button {
+  width: 100%;
+  margin: 5px 0;
+}
