@@ -483,7 +483,7 @@ restartButton.addEventListener("click", () => {
 
 // Funktion, um vom Backend die KI-Erklärung abzurufen
 function getAIExplanation(question, userAnswer, correctAnswer) {
-  return fetch("http://localhost:5000/explain", {
+  return fetch("https://fiaequiz-df812cde546b.herokuapp.com/explain", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
